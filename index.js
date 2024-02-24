@@ -10,12 +10,20 @@ const port = process.env.PORT || 3000;
 
 const connectDB = "mongodb+srv://user1:"+ process.env.PASSWORD + "@cluster0.ofgm2es.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 mongoose.connect(connectDB, {useNewUrlParser: true, useUnifiedTopology: true});
+
 let urlSchema = new mongoose.Schema({
-  original: String,
+  original: {type: String, required: true},
   short: Number
 })
 
-let Url = mongoose.model("Url", urlSchema)
+let Url = mongoose.model("Url", urlSchema);
+
+
+let createAndSaveUrl = function(done) {
+  var newUrl = new Url()
+}
+
+
 
 app.use(cors());
 
@@ -38,8 +46,6 @@ app.listen(port, function() {
 let resObj = {}
 app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req, res) {
   let url = req.params.shorturl
-  
-  
   
   res.json(resObj);
 })
