@@ -25,8 +25,9 @@ app.listen(port, function() {
 
 let resObj = {}
 app.get("/api/shorturl", function(req, res) {
-  resObj["original_url"] = req.originalUrl
-  resObj["short_url"] = req
-    
+  let url = req.params.shorturl
+  
+  if (url.includes)
+  
   res.json(resObj);
 })
