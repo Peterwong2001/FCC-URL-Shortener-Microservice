@@ -19,12 +19,6 @@ let urlSchema = new mongoose.Schema({
 let Url = mongoose.model("Url", urlSchema);
 
 
-let createAndSaveUrl = function(done) {
-  var newUrl = new Url()
-}
-
-
-
 app.use(cors());
 
 app.use('/public', express.static(`${process.cwd()}/public`));
@@ -45,7 +39,18 @@ app.listen(port, function() {
 
 let resObj = {}
 app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req, res) {
-  let url = req.params.shorturl
+  let inputurl = req.body["url"]
+  resObj["original_url"] = inputurl;
+  
+  let inputShort = 1;
+  
+  Url.findOne({})
+      .sort({short: -1})
+      .exec(function(err, done) {
+        if (err)
+          return done(err);
+      done(null, data)
+  })
   
   res.json(resObj);
 })
