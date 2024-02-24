@@ -72,4 +72,4 @@ app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req
 
 
 
-module.exports = mongoose.model("original", "short", urlSchema);
+
