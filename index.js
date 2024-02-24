@@ -2,9 +2,17 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const mongoose = require("mongoose");
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
+
+const connectDB = "mongodb+srv://user1:"+ process.env.PASSWORD + "@cluster0.ofgm2es.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+mongoose.connect(connectDB, {useNewUrlParser: true, useUnifiedTopology: true});
+let urlSchema = new mongoose.Schema({
+  original: String required: true,
+  short: Number
+})
 
 app.use(cors());
 
@@ -31,3 +39,5 @@ app.get("/api/shorturl", function(req, res) {
   
   res.json(resObj);
 })
+
+module.exports = mongoose.model("")
