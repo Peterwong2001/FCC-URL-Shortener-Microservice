@@ -46,10 +46,16 @@ app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req
   
   Url.findOne({})
       .sort({short: -1})
-      .exec(function(err, done) {
-        if (err)
-          return done(err);
-      done(null, data)
+      .exec(function(err, result) {
+        if (!err && result != undefined) {
+          inputShort = result.short + 1;
+        }
+    if (!err) {
+      Url.findOneAndUpdate(
+        {original: inputurl},
+        {original: originalUrl, short: inputShort}
+      )
+    }
   })
   
   res.json(resObj);
