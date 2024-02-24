@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 
 // Basic Configuration
 const port = process.env.PORT || 3000;
@@ -10,9 +11,11 @@ const port = process.env.PORT || 3000;
 const connectDB = "mongodb+srv://user1:"+ process.env.PASSWORD + "@cluster0.ofgm2es.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 mongoose.connect(connectDB, {useNewUrlParser: true, useUnifiedTopology: true});
 let urlSchema = new mongoose.Schema({
-  original: String required: true,
+  original: String,
   short: Number
 })
+
+let Url = mongoose.model("Url", urlSchema)
 
 app.use(cors());
 
@@ -31,13 +34,17 @@ app.listen(port, function() {
   console.log(`Listening on port ${port}`);
 });
 
+
 let resObj = {}
-app.get("/api/shorturl", function(req, res) {
+app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req, res) {
   let url = req.params.shorturl
   
-  if (url.includes)
+  
   
   res.json(resObj);
 })
 
-module.exports = mongoose.model("")
+
+
+
+module.exports = mongoose.model("original", "short", urlSchema);
