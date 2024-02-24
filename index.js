@@ -39,11 +39,20 @@ let Url = mongoose.model("Url", urlSchema);
 
 
 let resObj = {}
+const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
+const regex = new RegExp(expression);
+
 app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req, res) {
   let inputurl = req.body["url"]
   resObj["original_url"] = inputurl;
   
   let inputShort = 1;
+  
+  if(!inputurl.match(regex)) {
+    res.json({error: "invalid url"})
+    return
+  }
+  
   
   Url.findOne({})
       .sort({short: -1})
@@ -65,10 +74,13 @@ app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req
       )
     }
   })
-  
-  
 })
 
+app.get("/api/shorturl/:number", function(req, res) {
+  let number = req.params.number;
+  
+  Url.findOne({short: in})
+})
 
 
 
