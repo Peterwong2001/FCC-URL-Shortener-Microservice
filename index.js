@@ -8,17 +8,6 @@ const bodyParser = require("body-parser");
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
-const connectDB = "mongodb+srv://user1:"+ process.env.PASSWORD + "@cluster0.ofgm2es.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-mongoose.connect(connectDB, {useNewUrlParser: true, useUnifiedTopology: true});
-
-let urlSchema = new mongoose.Schema({
-  original: {type: String, required: true},
-  short: Number
-})
-
-let Url = mongoose.model("Url", urlSchema);
-
-
 app.use(cors());
 
 app.use('/public', express.static(`${process.cwd()}/public`));
@@ -37,6 +26,18 @@ app.listen(port, function() {
 });
 
 
+
+const connectDB = "mongodb+srv://user1:"+ process.env.PASSWORD + "@cluster0.ofgm2es.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+mongoose.connect(connectDB, {useNewUrlParser: true, useUnifiedTopology: true});
+
+let urlSchema = new mongoose.Schema({
+  original: {type: String, required: true},
+  short: Number
+})
+
+let Url = mongoose.model("Url", urlSchema);
+
+
 let resObj = {}
 app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req, res) {
   let inputurl = req.body["url"]
@@ -53,12 +54,19 @@ app.post("/api/shorturl", bodyParser.urlencoded({extended: false}), function(req
     if (!err) {
       Url.findOneAndUpdate(
         {original: inputurl},
-        {original: originalUrl, short: inputShort}
+        {original: inputurl, short: inputShort},
+        {new: true, upsert: true},
+        function(err, saveUrl) {
+          if(!err) {
+            resObj["short_url"] = saveUrl.short
+            res.json(resObj);
+          }
+        }
       )
     }
   })
   
-  res.json(resObj);
+  
 })
 
 
